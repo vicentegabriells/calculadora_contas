@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+    <head>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="style.css">
+
+        <script src="https://js.puter.com/v2/"></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css" integrity="sha512-ApSLB1Pd3/bZN8fWB/RG9YhN/7bd9Hkf3AGaE2mPfebjrxagjuBtx2GcgdqIlJkUzwylBo61r9Xa9NmgBI0swA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <title>Calculadora de gastos</title>
+
+    </head>
+
+    <body>
+
+        <div class="title">
+            <h1><i class="fa-regular fa-camera"></i> Calculadora de gastos</h1>
+            <p class="subtitle">Anexe fotos de comprovantes que irei calcular o total para você.</p>
+        </div>
+
+        <div class="gastos">
+            <p>Total gasto:</p>
+            <h2 class="total">R$0,00</h2>
+            <p>0 comprovantes lidos!</p>
+        </div>
+
+        <label class="upload">
+            <p>Anexe seus comprovantes aqui!</p>
+            <input class="fileInput" onchange="lerComprovantes()" type="file" accept="image/*">
+        </label>
+
+        <div class ="output">
+            <p>Comprovantes lidos:</p>
+            <div class="comprovantes"></div>
+
+        </div>
+
+    </body>
+
+    <script src="scripts.js"></script>
+
+</html>
