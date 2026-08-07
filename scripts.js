@@ -10,11 +10,11 @@ Utilize a seguinte estrutura exata, inserindo os ícones do Font Awesome (fa-sol
     <ul>
         <li><span>Arroz 5kg</span> <strong>R$ 25,00</strong></li>
     </ul>
-</div>
-
-<!-- ATENÇÃO AQUI: Você DEVE incluir o atributo data-valor na div abaixo com o valor numérico total (usando ponto para decimais, sem cifrão). -->
-<div class="resumo-total" data-valor="25.00">
-    <h3><i class="fa-solid fa-wallet"></i> Total: <strong>R$ 25,00</strong></h3>
+    
+    <!-- ATENÇÃO AQUI: A div resumo-total agora está DENTRO da div categoria -->
+    <div class="resumo-total" data-valor="25.00">
+        <h3><i class="fa-solid fa-wallet"></i> Total: <strong>R$ 25,00</strong></h3>
+    </div>
 </div>
 
 Regras cruciais:
@@ -23,12 +23,36 @@ Regras cruciais:
 3. Se a imagem não for um comprovante válido, retorne: <div class="erro">Não foi possível ler o comprovante.</div>`;
 
 async function lerComprovantes() {
-    let fileInput = document.querySelector(".fileInput").files[0]
+    let fileInput = document.querySelector(".fileInput").files[0];
 
-    let response = await puter.ai.chat(comprovantes, fileInput)
-    let texto = response.message.content
+    document.querySelector(".comprovantes").innerHTML = "<p>Lendo comprovante, aguarde...</p>";
 
-    document.querySelector(".comprovantes").innerHTML = texto
+    let response = await puter.ai.chat(comprovantes, fileInput);
+    let texto = response.message.content;
 
-    console.log("Lendo comprovantes...")
-}   
+    document.querySelector(".comprovantes").innerHTML = texto;
+    
+    let resumoElement = document.querySelector(".comprovantes .resumo-total");
+
+    if (resumoElement) {
+        let valorString = resumoElement.getAttribute("data-valor");
+        
+        if (valorString) {
+            let valorNumerico = parseFloat(valorString);
+            
+            let valorFormatado = valorNumerico.toLocaleString('pt-BR', { 
+                style: 'currency', 
+                currency: 'BRL' 
+            });
+            
+            document.querySelector(".total").innerText = valorFormatado;
+            
+            let paragrafosGastos = document.querySelectorAll(".gastos p");
+            if (paragrafosGastos.length > 1) {
+                paragrafosGastos[1].innerText = "1 comprovante lido!";
+            }
+        }
+    }
+
+    console.log("Comprovante lido com sucesso!");
+}

@@ -59,6 +59,7 @@ label.upload {
 .comprovantes {
     text-align: left;
     margin-top: 20px;
+    text-align: center;
 }
 
 .categoria {
@@ -88,7 +89,7 @@ label.upload {
     display: flex;
     justify-content: space-between;
     margin-bottom: 5px;
-    font-size: 16px;
+    font-size: 12px;
 }
 
 .resumo-total {
@@ -98,6 +99,7 @@ label.upload {
     border-radius: 15px;
     text-align: center;
     font-size: 20px;
+    margin-top: 15px;
 }
 
 .erro {
@@ -106,4 +108,11 @@ label.upload {
     padding: 15px;
     border-radius: 15px;
     font-weight: bold;
+}
+
+.resumo-total h3 {
+    color: #172727; /* Volta o texto para a cor escura */
+    border-bottom: none; /* Remove a linha preta */
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
