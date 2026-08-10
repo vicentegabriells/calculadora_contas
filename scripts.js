@@ -25,6 +25,42 @@ Regras cruciais:
 let valorTotalGasto = 0;
 let totalComprovantesLidos = 0;
 
+function atualizarInterfaceValores() {
+    let valorFormatado = valorTotalGasto.toLocaleString('pt-BR', { 
+        style: 'currency', 
+        currency: 'BRL' 
+    });
+
+    document.querySelector(".total").innerText = valorFormatado;
+
+    let paragrafosGastos = document.querySelectorAll(".gastos p");
+    if (paragrafosGastos.length > 1) {
+        paragrafosGastos[1].innerText = `${totalComprovantesLidos} comprovante${totalComprovantesLidos !== 1 ? 's' : ''} lido${totalComprovantesLidos !== 1 ? 's' : ''}!`;
+    }
+}
+
+function deletarLeitura(botaoElemento) {
+    let card = botaoElemento.closest(".leitura-card");
+
+    let resumoElement = card.querySelector(".resumo-total");
+
+    if (resumoElement) {
+        let valorString = resumoElement.getAttribute("data-valor");
+
+        if (valorString) {
+            let valorNumerico = parseFloat(valorString);
+
+            valorTotalGasto -= valorNumerico;
+            totalComprovantesLidos -= 1;
+            
+            atualizarInterfaceValores();
+        }
+    }
+
+    card.remove();
+
+}
+
 async function lerComprovantes() {
     let fileInput = document.querySelector(".fileInput");
     let file = fileInput.files[0];
@@ -44,10 +80,21 @@ async function lerComprovantes() {
 
         loadingMsg.remove();
 
-        let tempDiv = document.createElement("div");
-        tempDiv.innerHTML = texto;
-        
-        let resumoElement = tempDiv.querySelector(".resumo-total");
+        let cardLeitura = document.createElement("div");
+        cardLeitura.className = "leitura-card";
+
+        let btnDelete = document.createElement("button");
+        btnDelete.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        btnDelete.className = "btn-delete";
+        btnDelete.onclick = function() { deletarLeitura(this); };
+
+        let contentDiv = document.createElement("div");
+        contentDiv.innerHTML = texto;
+
+        cardLeitura.appendChild(btnDelete);
+        cardLeitura.appendChild(contentDiv);
+
+        let resumoElement = contentDiv.querySelector(".resumo-total");
 
         if (resumoElement) {
             let valorString = resumoElement.getAttribute("data-valor");
@@ -57,22 +104,13 @@ async function lerComprovantes() {
             
                 valorTotalGasto += valorNumerico;
                 totalComprovantesLidos += 1;
+
+                atualizarInterfaceValores();
                 
-                let valorFormatado = valorTotalGasto.toLocaleString('pt-BR', { 
-                    style: 'currency', 
-                    currency: 'BRL' 
-                });
-                
-                document.querySelector(".total").innerText = valorFormatado;
-                
-                let paragrafosGastos = document.querySelectorAll(".gastos p");
-                if (paragrafosGastos.length > 1) {
-                    paragrafosGastos[1].innerText = `${totalComprovantesLidos} comprovante${totalComprovantesLidos !== 1 ? 's' : ''} lido${totalComprovantesLidos !== 1 ? 's' : ''}!`;
-                }
             }
         }
 
-        containerComprovantes.insertAdjacentHTML('afterbegin', texto);
+        containerComprovantes.prepend(cardLeitura);
 
         console.log("Comprovante lido e adicionado ao histórico com sucesso!");
 
