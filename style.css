@@ -116,3 +116,33 @@ label.upload {
     margin-bottom: 0;
     padding-bottom: 0;
 }
+
+.leitura-card {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.btn-delete {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #172727;
+    color: #ff6b6b;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(50, 50, 0, 30);
+    transition: 0.2s ease;
+}
+
+.btn-delete:hover {
+    background: #ff6b6b;
+    color: #172727;
+}
