@@ -1,4 +1,4 @@
-let comprovantes = `Você é um assistente especializado em extração de dados e finanças.
+let promptComprovante = `Você é um assistente especializado em extração de dados e finanças.
 Analise a imagem deste comprovante fiscal e extraia todos os itens comprados, seus valores e o valor total.
 
 Retorne EXCLUSIVAMENTE em formato HTML puro, pronto para ser inserido via innerHTML. NÃO inclua blocos markdown (como \`\`\`html).
@@ -22,37 +22,64 @@ Regras cruciais:
 2. Formate os valores visíveis no padrão brasileiro (R$ 0,00), mas o 'data-valor' deve ser estritamente numérico (ex: 150.50).
 3. Se a imagem não for um comprovante válido, retorne: <div class="erro">Não foi possível ler o comprovante.</div>`;
 
+let valorTotalGasto = 0;
+let totalComprovantesLidos = 0;
+
 async function lerComprovantes() {
-    let fileInput = document.querySelector(".fileInput").files[0];
-
-    document.querySelector(".comprovantes").innerHTML = "<p>Lendo comprovante, aguarde...</p>";
-
-    let response = await puter.ai.chat(comprovantes, fileInput);
-    let texto = response.message.content;
-
-    document.querySelector(".comprovantes").innerHTML = texto;
+    let fileInput = document.querySelector(".fileInput");
+    let file = fileInput.files[0];
     
-    let resumoElement = document.querySelector(".comprovantes .resumo-total");
+    if (!file) return;
 
-    if (resumoElement) {
-        let valorString = resumoElement.getAttribute("data-valor");
+    let containerComprovantes = document.querySelector(".comprovantes");
+
+    let loadingMsg = document.createElement("p");
+    loadingMsg.className = "loading-msg";
+    loadingMsg.innerText = "Lendo comprovante, aguarde...";
+    containerComprovantes.prepend(loadingMsg);
+
+    try {
+        let response = await puter.ai.chat(promptComprovante, file);
+        let texto = response.message.content;
+
+        loadingMsg.remove();
+
+        let tempDiv = document.createElement("div");
+        tempDiv.innerHTML = texto;
         
-        if (valorString) {
-            let valorNumerico = parseFloat(valorString);
+        let resumoElement = tempDiv.querySelector(".resumo-total");
+
+        if (resumoElement) {
+            let valorString = resumoElement.getAttribute("data-valor");
             
-            let valorFormatado = valorNumerico.toLocaleString('pt-BR', { 
-                style: 'currency', 
-                currency: 'BRL' 
-            });
+            if (valorString) {
+                let valorNumerico = parseFloat(valorString);
             
-            document.querySelector(".total").innerText = valorFormatado;
-            
-            let paragrafosGastos = document.querySelectorAll(".gastos p");
-            if (paragrafosGastos.length > 1) {
-                paragrafosGastos[1].innerText = "1 comprovante lido!";
+                valorTotalGasto += valorNumerico;
+                totalComprovantesLidos += 1;
+                
+                let valorFormatado = valorTotalGasto.toLocaleString('pt-BR', { 
+                    style: 'currency', 
+                    currency: 'BRL' 
+                });
+                
+                document.querySelector(".total").innerText = valorFormatado;
+                
+                let paragrafosGastos = document.querySelectorAll(".gastos p");
+                if (paragrafosGastos.length > 1) {
+                    paragrafosGastos[1].innerText = `${totalComprovantesLidos} comprovante${totalComprovantesLidos !== 1 ? 's' : ''} lido${totalComprovantesLidos !== 1 ? 's' : ''}!`;
+                }
             }
         }
+
+        containerComprovantes.insertAdjacentHTML('afterbegin', texto);
+
+        console.log("Comprovante lido e adicionado ao histórico com sucesso!");
+
+    } catch (error) {
+        loadingMsg.innerText = "Ocorreu um erro ao ler o comprovante.";
+        console.error("Erro na leitura do comprovante: ", error);
     }
 
-    console.log("Comprovante lido com sucesso!");
+    fileInput.value = "";
 }
