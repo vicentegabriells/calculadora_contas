@@ -2,7 +2,7 @@
 
 > Já pensou em uma calculadora de gastos que você anexasse diversos comprovantes e os mesmo fossem lidos e gerado um calculo total de gastos? É exatamente isso que este pequeno projeto web faz.
 
-> URL para acessar no navegador: https://vicentegabriells.github.io/calculadora_contas/
+* **URL para acessar no navegador: https://vicentegabriells.github.io/calculadora_contas/**
 
 ## Tecnologias Utilizadas
 
