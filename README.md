@@ -2,19 +2,22 @@
 
 > Já pensou em uma calculadora de gastos que você anexasse diversos comprovantes e os mesmo fossem lidos e gerado um calculo total de gastos? É exatamente isso que este pequeno projeto web faz.
 
+> URL para acessar no navegador: https://vicentegabriells.github.io/calculadora_contas/
+
 ## Tecnologias Utilizadas
 
 Liste as linguagens, frameworks, bancos de dados e ferramentas principais que compõem o projeto.
 
-*   **HTML e CSS**
-*   **JavaScript**
-*   **API de IA**
+*   **HTML5 e CSS3**
+*   **JavaScript (ES6+)**
+*   **Puter.js (API de IA para leitura e chat)**
+*   **Font Awesome (Ícones)**
 
 ## Pré-requisitos
 
 Antes de começar, você vai precisar ter as seguintes ferramentas instaladas na sua máquina:
 
-*   LiveServer
+*   LiveServer (Extensão do VS Code ou similar)
 
 ## Instalação e Configuração
 
